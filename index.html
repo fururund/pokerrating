@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カードゲーム レーティングシステム</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- パスワード認証モーダル -->
+    <div id="password-modal" class="password-modal">
+        <div class="password-modal-content">
+            <div class="password-header">
+                <h2>🔒 アクセス認証</h2>
+                <p>レーティングシステムにアクセスするにはパスワードが必要です</p>
+            </div>
+            <div class="password-form">
+                <input type="password" id="password-input" placeholder="パスワードを入力してください" autocomplete="off">
+                <button id="password-submit-btn">ログイン</button>
+            </div>
+            <div id="password-error" class="password-error" style="display: none;">
+                パスワードが間違っています。再度入力してください。
+            </div>
+            <div class="password-hint">
+                <small>※ パスワードを忘れた場合は管理者にお問い合わせください</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="main-container" style="display: none;">
+        <header>
+            <h1>🃏 カードゲーム レーティングシステム</h1>
+            <nav>
+                <button class="nav-btn active" data-tab="players">プレイヤー管理</button>
+                <button class="nav-btn" data-tab="match">対戦記録</button>
+                <button class="nav-btn" data-tab="leaderboard">リーダーボード</button>
+                <button class="nav-btn" data-tab="statistics">統計</button>
+                <button class="nav-btn" data-tab="data">データ管理</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- プレイヤー管理タブ -->
+            <div id="players-tab" class="tab-content active">
+                <div class="section">
+                    <h2>プレイヤー登録</h2>
+                    <div class="form-group">
+                        <input type="text" id="player-name" placeholder="プレイヤー名を入力">
+                        <input type="number" id="initial-rating" placeholder="初期レート (デフォルト: 1500)" value="1500">
+                        <button id="add-player-btn">プレイヤー追加</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>登録済みプレイヤー</h2>
+                    <div id="players-list" class="players-grid"></div>
+                </div>
+            </div>
+
+            <!-- 対戦記録タブ -->
+            <div id="match-tab" class="tab-content">
+                <div class="section">
+                    <h2>対戦記録入力</h2>
+                    <div class="form-group">
+                        <label>参加プレイヤー選択（3-8人）:</label>
+                        <div id="player-selection" class="player-selection"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>最終順位:</label>
+                        <div id="ranking-input" class="ranking-input"></div>
+                    </div>
+                    <button id="record-match-btn">対戦記録</button>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <h2>対戦履歴</h2>
+                        <div class="history-controls">
+                            <select id="history-count-select" class="history-count-select">
+                                <option value="5" selected>直近5件</option>
+                                <option value="10">直近10件</option>
+                                <option value="30">直近30件</option>
+                                <option value="all">すべて</option>
+                            </select>
+                            <div class="history-buttons">
+                                <button id="undo-last-match-btn" class="undo-last-btn" style="display: none;">
+                                    ↶ 最後の対戦を取り消し
+                                </button>
+                                <button id="clear-all-matches-btn" class="clear-all-btn" style="display: none;">
+                                    🗑️ 全履歴削除
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="match-history" class="match-history"></div>
+                </div>
+            </div>
+
+            <!-- リーダーボードタブ -->
+            <div id="leaderboard-tab" class="tab-content">
+                <div class="section">
+                    <h2>現在のランキング</h2>
+                    <div id="leaderboard" class="leaderboard"></div>
+                </div>
+            </div>
+
+            <!-- 統計タブ -->
+            <div id="statistics-tab" class="tab-content">
+                <div class="section">
+                    <h2>レート推移グラフ</h2>
+                    <select id="player-select-chart">
+                        <option value="">プレイヤーを選択</option>
+                    </select>
+                    <div class="chart-container">
+                        <canvas id="rating-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>統計情報</h2>
+                    <div id="statistics-info" class="statistics-grid"></div>
+                </div>
+            </div>
+
+            <!-- データ管理タブ -->
+            <div id="data-tab" class="tab-content">
+                <div class="section">
+                    <h2>データ管理</h2>
+                    <div class="data-controls">
+                        <button id="export-btn">データエクスポート</button>
+                        <input type="file" id="import-file" accept=".json" style="display: none;">
+                        <button id="import-btn">データインポート</button>
+                        <button id="clear-data-btn" class="danger">全データクリア</button>
+                        <button id="logout-btn" class="logout-btn">🔓 ログアウト</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
